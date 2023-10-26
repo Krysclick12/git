@@ -196,4 +196,9 @@ test_expect_success 'show-ref --verify with dangling ref' '
 	)
 '
 
+test_expect_success 'show-ref sub-modes are mutually exclusive' '
+	test_must_fail git show-ref --verify --exclude-existing 2>err &&
+	grep "only one of ${SQ}--exclude-existing${SQ} or ${SQ}--verify${SQ} can be given" err
+'
+
 test_done
