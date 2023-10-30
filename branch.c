@@ -721,7 +721,8 @@ static int submodule_create_branch(struct repository *r,
 		return ret;
 	ret = finish_command(&child);
 	strbuf_read(&child_err, child.err, 0);
-	strbuf_add_lines(&out_buf, out_prefix, child_err.buf, child_err.len);
+	strbuf_add_lines(&out_buf, out_prefix, out_prefix,
+			 child_err.buf, child_err.len);
 
 	if (ret)
 		fprintf(stderr, "%s", out_buf.buf);

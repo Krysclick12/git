@@ -599,7 +599,8 @@ void strbuf_list_free(struct strbuf **list);
 void strbuf_strip_file_from_path(struct strbuf *sb);
 
 void strbuf_add_lines(struct strbuf *sb,
-		      const char *prefix,
+		      const char *default_prefix,
+		      const char *tab_or_nl_prefix,
 		      const char *buf,
 		      size_t size);
 

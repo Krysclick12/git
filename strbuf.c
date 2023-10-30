@@ -339,26 +339,6 @@ void strbuf_addf(struct strbuf *sb, const char *fmt, ...)
 	va_end(ap);
 }
 
-static void add_lines(struct strbuf *out,
-			const char *prefix1,
-			const char *prefix2,
-			const char *buf, size_t size)
-{
-	while (size) {
-		const char *prefix;
-		const char *next = memchr(buf, '\n', size);
-		next = next ? (next + 1) : (buf + size);
-
-		prefix = ((prefix2 && (buf[0] == '\n' || buf[0] == '\t'))
-			  ? prefix2 : prefix1);
-		strbuf_addstr(out, prefix);
-		strbuf_add(out, buf, next - buf);
-		size -= next - buf;
-		buf = next;
-	}
-	strbuf_complete_line(out);
-}
-
 void strbuf_add_commented_lines(struct strbuf *out, const char *buf,
 				size_t size, char comment_line_char)
 {
@@ -369,7 +349,7 @@ void strbuf_add_commented_lines(struct strbuf *out, const char *buf,
 		xsnprintf(prefix1, sizeof(prefix1), "%c ", comment_line_char);
 		xsnprintf(prefix2, sizeof(prefix2), "%c", comment_line_char);
 	}
-	add_lines(out, prefix1, prefix2, buf, size);
+	strbuf_add_lines(out, prefix1, prefix2, buf, size);
 }
 
 void strbuf_commented_addf(struct strbuf *sb, char comment_line_char,
@@ -747,10 +727,23 @@ ssize_t strbuf_read_file(struct strbuf *sb, const char *path, size_t hint)
 	return len;
 }
 
-void strbuf_add_lines(struct strbuf *out, const char *prefix,
+void strbuf_add_lines(struct strbuf *out, const char *default_prefix,
+		      const char *tab_or_nl_prefix,
 		      const char *buf, size_t size)
 {
-	add_lines(out, prefix, NULL, buf, size);
+	while (size) {
+		const char *prefix;
+		const char *next = memchr(buf, '\n', size);
+		next = next ? (next + 1) : (buf + size);
+
+		prefix = (buf[0] == '\n' || buf[0] == '\t')
+			  ? tab_or_nl_prefix : default_prefix;
+		strbuf_addstr(out, prefix);
+		strbuf_add(out, buf, next - buf);
+		size -= next - buf;
+		buf = next;
+	}
+	strbuf_complete_line(out);
 }
 
 void strbuf_addstr_xml_quoted(struct strbuf *buf, const char *s)
