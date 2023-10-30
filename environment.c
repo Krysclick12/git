@@ -428,9 +428,22 @@ void strbuf_commented_addf(struct strbuf *sb,
 	strbuf_vaddf(&buf, fmt, params);
 	va_end(params);
 
-	strbuf_add_commented_lines(sb, buf.buf, buf.len, comment_line_char);
+	strbuf_add_commented_lines(sb, buf.buf, buf.len);
 	if (incomplete_line)
 		sb->buf[--sb->len] = '\0';
 
 	strbuf_release(&buf);
+}
+
+void strbuf_add_commented_lines(struct strbuf *out,
+				const char *buf, size_t size)
+{
+	static char prefix1[3];
+	static char prefix2[2];
+
+	if (prefix1[0] != comment_line_char) {
+		xsnprintf(prefix1, sizeof(prefix1), "%c ", comment_line_char);
+		xsnprintf(prefix2, sizeof(prefix2), "%c", comment_line_char);
+	}
+	strbuf_add_lines(out, prefix1, prefix2, buf, size);
 }

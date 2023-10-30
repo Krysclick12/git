@@ -283,15 +283,6 @@ void strbuf_splice(struct strbuf *sb, size_t pos, size_t len,
 		   const void *data, size_t data_len);
 
 /**
- * Add a NUL-terminated string to the buffer. Each line will be prepended
- * by a comment character and a blank.
- */
-void strbuf_add_commented_lines(struct strbuf *out,
-				const char *buf, size_t size,
-				char comment_line_char);
-
-
-/**
  * Add data of given length to the buffer.
  */
 void strbuf_add(struct strbuf *sb, const void *data, size_t len);
