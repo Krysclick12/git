@@ -911,6 +911,15 @@ for full details.
 	should not normally need to set this to `0`, but it may be
 	useful when trying to salvage data from a corrupted repository.
 
+`GIT_COMMIT_GRAPH_PARANOIA`::
+	If this Boolean environment variable is set to false, ignore the
+	case where commits exist in the commit graph but not in the
+	object database. Normally, Git will check whether commits loaded
+	from the commit graph exist in the object database to avoid
+	issues with stale commit graphs, but this check comes with a
+	performance penalty. The default is `1` (i.e., be paranoid about
+	stale commits in the commit graph).
+
 `GIT_ALLOW_PROTOCOL`::
 	If set to a colon-separated list of protocols, behave as if
 	`protocol.allow` is set to `never`, and each of the listed
