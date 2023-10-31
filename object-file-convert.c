@@ -207,7 +207,7 @@ static int convert_commit_object(struct strbuf *out,
 
 			/* Write the new mergetag */
 			strbuf_addstr(out, "mergetag");
-			strbuf_add_lines(out, " ", new_tag.buf, new_tag.len);
+			strbuf_add_lines(out, " ", " ", new_tag.buf, new_tag.len);
 			strbuf_release(&tag);
 			strbuf_release(&new_tag);
 		}
